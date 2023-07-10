@@ -1,0 +1,32 @@
+**bold** \# can go to visual tab to make life easy
+
+To make a plot we use the `ggplot()` function.
+
+###### Header 6
+
+# Header 1
+
+1.  [GitHub](github.com)
+
+2.  ![](images/Age%20Distribution%20Histogram.png){width="311"}
+
+3.  
+
+    | Col1 | Col2 | Col3 |
+    |------|------|------|
+    |      |      |      |
+    |      |      |      |
+    |      |      |      |
+
+```{r}
+# this is a comment
+library(ggplot2)
+
+ggplot(data = mpg, aes(x = hwy)) + geom_density()
+```
+
+add text between chunks
+
+```{r}
+# this is another R code chunk found by entering /
+```

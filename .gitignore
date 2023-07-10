@@ -2,3 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+
+DSRP_2023.Rproj
+plots/
+data/
+.DS_Store
+git
+
