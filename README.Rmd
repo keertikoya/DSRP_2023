@@ -1,7 +1,3 @@
----
----
----
-
 # Data Science Research Project on Thyroid Disease
 
 #### Background
