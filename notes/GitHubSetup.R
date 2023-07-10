@@ -5,5 +5,5 @@ usethis::use_git_config(user.name = "Keerti Koya",
 ## create a personal access token (PAT) for authentication
 usethis::create_github_token()
 
-## token: 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
-credentials::set_github_pat("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")
+## token: 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
+credentials::set_github_pat("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")
