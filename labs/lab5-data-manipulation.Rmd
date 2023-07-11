@@ -1,3 +1,7 @@
+---
+---
+---
+
 ```{r}
 # loading in library
 library(dplyr)
@@ -8,8 +12,7 @@ library(dplyr)
 ```{r}
 head(data)
 
-# the normal range of FTI (free thyroxine index) is 53–142
-filter(sub_data, between(FTI, 53, 142))
+filter(data, age > 70)
 ```
 
 -   create a smaller dataset with a subset of variables using select()
