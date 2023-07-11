@@ -1,0 +1,70 @@
+```{r}
+# loading in library
+library(dplyr)
+```
+
+-   filtering the observations of your dataset based on one or more variable using filter()
+
+```{r}
+head(data)
+
+# the normal range of FTI (free thyroxine index) is 53–142
+filter(sub_data, between(FTI, 53, 142))
+```
+
+-   create a smaller dataset with a subset of variables using select()
+
+```{r}
+names(data)
+
+# subset of data with all columns measuring level of X in blood
+sub_data = select(data, TSH, T3, TT4, T4U, FTI, TBG)
+sub_data
+```
+
+-   Add 2 new columns to your dataset using mutate()
+
+```{r}
+filter(sub_data, between(FTI, 53, 142))
+
+# 1 if their level is normal, 0 if it is not
+# 52-142 is normal for FTI, 13-39 is normal for TBG
+mutate(sub_data, 
+       normal_FTI = case_when(FTI > 53 & FTI < 142 ~ 1, 
+                              FTI < 53 | FTI > 142 ~ 0),
+       normal_TBG = case_when(TBG > 13 & TBG < 39 ~ 1, 
+                              TBG < 13 | TBG > 39 ~ 0))
+```
+
+-   Create a data table of grouped summaries on at least one numeric variable by at least one categorical variable using summarize()
+
+```{r}
+# average TBG level based on sex
+summarize(data, 
+          mean_TBG = mean(TBG, na.rm = T),
+          .by = sex)
+```
+
+-   Reorder a data table of your choice by one or more variables using arrange()
+
+```{r}
+# arranging based on age and target value
+arrange(data, age, target)
+```
+
+-   Create at least one new visualization using some form of an updated dataset
+
+```{r}
+# adding column to sub_data
+sub_data <- mutate(sub_data, normal_FTI = 
+       case_when(FTI > 53 & FTI < 142 ~ 1, 
+                  FTI < 53 | FTI > 142 ~ 0))
+
+# bar plot visualization of boolean var vs. double var
+ggplot(data = sub_data, aes(x = normal_FTI, y = FTI)) +
+  geom_bar(stat = "summary",
+           fun = "mean",
+           fill = "lightblue")
+
+# ~ 150 people with not normal FTI levels and ~100 with normal levels
+```

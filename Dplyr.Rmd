@@ -1,0 +1,344 @@
+```{r}
+#install.packages("dplyr")
+library(dplyr)
+
+library(ggplot2)
+```
+
+# Practicing `dplyr` functions using the `starwars` dataset
+
+```{r}
+head(starwars)
+```
+
+## Subset rows with `filter`
+
+`filter()` allows us to subset the rows of a dataset based on the values
+
+```{r}
+# filter for rows with human characters
+filter(starwars, species == "Human")
+
+# save to a new R object
+humans <- filter(starwars, species == "Human")
+humans
+filter(humans, sex == "male")
+
+# filter multiple columns at once
+filter(starwars, species == "Human", sex == "male")
+```
+
+-   `!` is "not:
+
+-   `==` is "equal"
+
+-   `&` is "and"
+
+-   `|` is "or"
+
+-   `<` is "less than"
+
+-   `>` is "greater than"
+
+-   `is.na()` returns TRUE if values is NA
+
+```{r}
+# return characters with a missing mass
+filter(starwars, is.na(mass))
+```
+
+```{r}
+# get characters that are NOT human
+filter(starwars, species != "Human")
+```
+
+variable_name `%in%` vector_of_values returns TRUE if the value of variable_name is equal to one of the values in vector_of_values (example below)
+
+```{r}
+skin_color <- "grey"
+skin_color %in% c("yellow", "fair", "tan") #returns false befause "grey" is not in vector of colors
+
+# filter for characters with brown or blond hair
+filter(starwars, hair_color %in% c("brown","blond"))
+```
+
+`grepl("characters_of_interest", variable_name)` returns TRUE if the value of variable_name contains the characters_of_interest
+
+```{r}
+filter(starwars, grepl("blond", hair_color))
+# "blonde" and "blond"
+
+# get all characters with blue in their eyes
+filter(starwars, grepl("blue", eye_color))
+```
+
+You can use `>`, `<`, `<=`, `>=` to compare numeric or categorical variables
+
+-   nominal categorical variables (character vectors) are ranked alphabetically
+
+    -   name \< "d"
+
+        -   a, b, c, d
+
+-   ordinal categorical variables (factors) are ranked based on the built-in-order
+
+```{r}
+# starwars characters with a name starting with letters before "D"
+filter(starwars, name < "D")
+```
+
+```{r}
+str(diamonds)
+# cut has 5 built-in levels
+
+filter(diamonds, cut > "Good")
+
+"D" < "d" # false
+"d" < "D" # true
+```
+
+`between(x, left, right)` is a shorthand for x \>= left & x \<= right
+
+```{r}
+between(5,1,7) # true because 5 is >= 7 and <= 1
+filter(starwars, between(mass, 50, 100))
+```
+
+### Practice
+
+1.  missing hair color
+
+```{r}
+filter(starwars, is.na(hair_color))
+```
+
+1.  shorter than 100cm and not droids
+
+```{r}
+filter(starwars, height < 100, species != "Droid")
+```
+
+1.  born between years 100 and 200
+
+```{r}
+filter(starwars, between(birth_year,100,200))
+```
+
+1.  another of choice
+
+```{r}
+# str(starwars)
+filter(starwars, height > 100, hair_color == "blond", sex == "male", species == "Human")
+```
+
+```{r}
+filter(starwars, mass > 50, hair_color == "white", between(height, 100, 200))
+```
+
+```{r}
+filter(starwars, homeworld == "Serenno", species == "Human")
+```
+
+## Order rows with `arrange`
+
+`arrange()` reorder rows based on the values of column(s)
+
+```{r}
+arrange(starwars, name)
+# order of character values: aAbBcCdD
+
+# order by species and birth year
+arrange(starwars, species, birth_year)
+# NA rows get pushed to bottom
+
+# use desc() to go in descending order
+arrange(starwars, species, desc(birth_year))
+```
+
+### Practice
+
+1.  arrange from tallest to shortest
+
+```{r}
+arrange(starwars, desc(height))
+```
+
+1.  arrange from shortest to tallest by species
+
+```{r}
+arrange(starwars, height, species) # order by height, tiebreaker is alphabetic species
+arrange(starwars, species, height) # orer by species, within species, order shortest to tallest
+```
+
+1.  alphabetize characters by their hair color then eye color
+
+```{r}
+arrange(starwars, hair_color, eye_color)
+```
+
+1.  one of choice
+
+```{r}
+arrange(starwars, homeworld, films)
+```
+
+## Subset columns with `select()`
+
+```{r}
+select(starwars, hair_color, skin_color, eye_color)
+character_colors <- select(starwars, hair_color, skin_color, eye_color)
+character_colors
+```
+
+We can also select multiple columns in a row
+
+```{r}
+# name to eye color column (inclusive)
+select(starwars, name:eye_color) 
+```
+
+We can also remove columns by name using a `-`
+
+```{r}
+starwars
+select(starwars, -films, -vehicles, -starships)
+select(starwars, -c(films, vehicles, starships))
+select(starwars, -c(films:starships))
+```
+
+## Helpful functions
+
+`everything()` is a shortcut for "everything else"
+
+```{r}
+select(starwars, species, everything())
+# put species first, then all other columns
+
+# alphabetize columns
+starwars_names <- sort(names(starwars))
+starwars_names
+select(starwars, starwars_names)
+```
+
+-   `starts_with("abc")` matches column names that start with "abc"
+
+-   `ends_with("abc")` matches column names that end with "abc"
+
+-   `contains("abc")` matches column names that contain "abc"
+
+```{r}
+select(starwars, starts_with("h"))
+
+select(starwars, contains("or"))
+```
+
+### Practice
+
+1.  How many humans live in X homeworld?
+2.  6 ways:
+    1.  select(starwars, hair_color, skin_color, eye_color, birth_year)
+    2.  select(starwars, hair_color:birth_year)
+    3.  select(starwars, -name, -height, -mass, -sex, -gender, -homeworld, -species, -films, -vehicles, -starships)
+    4.  select(starwars, -c(name, height, mass, sex, gender, homeworld, species, films, vehicles, starships)))
+    5.  select(starwars, -c(name:mass,sex:starships))
+    6.  
+select(starwars, contains("\_"))
+    7.  select(starwars, contains("color"), birth_year))
+    8.  select(starwars, ends_with("color"), ends_with("year"))
+
+```{r}
+names(starwars)
+```
+
+```{r}
+
+select(starwars, ends_with("color"), ends_with("year"))
+```
+
+## Add new variables with `mutate`
+
+```{r}
+starwars_small <- select(starwars, height, mass, species)
+starwars_small
+
+mutate(starwars_small,
+       height_m = height/100)
+```
+
+We can also create multiple variables at once and we can refer to variables we just created
+
+```{r}
+mutate(starwars_small,
+       height_m = height/100,
+       bmi = mass/height_m^2)
+
+transmute(starwars_small,
+       height_m = height/100,
+       bmi = mass/height_m^2)
+```
+
+Summary statistics give one value for the entire column: `sum(), mean()`
+
+```{r}
+mutate(starwars_small,
+       sum = sum(mass, na.rm = T))
+
+mutate(starwars_small,
+       raw_addition = height + mass,
+       summary_sum = sum(height, mass, na.rm = T))
+```
+
+Group by a variable using the `.by` parameter
+
+```{r}
+mutate(starwars_small,
+      species_mass = mean(mass, na.rm = T),
+       .by = species)
+```
+
+Change the type of a variable
+
+```{r}
+mutate(starwars_small,
+       mass = as.character((mass)))
+
+# for 1/0 columns can use as.logical to change to TRUE/FALSE
+```
+
+### Practice
+
+1.  convert mass to pounds (1 kg \~ 2.2 lbs)
+
+```{r}
+mutate(starwars_small,
+      mass_lbs = mass*2.2)
+```
+
+## Summarize data with `summarize`
+
+```{r}
+summarize(starwars, 
+          mean_mass = mean(mass, na.rm = T))
+
+# group by species
+summarize(starwars, 
+          mean_mass = mean(mass, na.rm = T),
+          .by = species)
+```
+
+The only columns kept are the column you group by and the columns you create.
+
+`n()` is a helpful function that returns the number of rows in a group
+
+```{r}
+summarize(starwars, 
+          mean_mass = mean(mass, na.rm = T),
+          count = n(),
+          .by = species)
+
+# group by multiple groups
+summarize(starwars, 
+          mean_mass = mean(mass, na.rm = T),
+          count = n(),
+          .by = c(species,sex))
+```
