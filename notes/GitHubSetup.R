@@ -5,8 +5,7 @@ usethis::use_git_config(user.name = "Keerti Koya",
 ## create a personal access token (PAT) for authentication
 usethis::create_github_token()
 
-## token: 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
-credentials::set_github_pat("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")
+#credentials::set_github_pat("")
 
 # git config --global --edit 
   # gets rid of git@github.com: and gets https
