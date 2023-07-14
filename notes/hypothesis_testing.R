@@ -76,7 +76,7 @@ mpg
 t <- table(mpg$year, mpg$drv)
 chisq_result <- chisq.test(t)
 chisq_result$p.value
-chisq_result$residuls
+chisq_result$residuals
 # p>0.05 so insignificant
 
 install.packages("corrplot")
@@ -110,7 +110,7 @@ chi <- chisq.test(t)
 chi$p.value
 chi$residuals
 
-corrplot(chi$residuals, is.cor = F)
+corrplot(chisq_result$residuals, is.cor = F)
 
 
 
