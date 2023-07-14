@@ -241,8 +241,7 @@ select(starwars, contains("or"))
     3.  select(starwars, -name, -height, -mass, -sex, -gender, -homeworld, -species, -films, -vehicles, -starships)
     4.  select(starwars, -c(name, height, mass, sex, gender, homeworld, species, films, vehicles, starships)))
     5.  select(starwars, -c(name:mass,sex:starships))
-    6.  
-select(starwars, contains("\_"))
+    6.  select(starwars, contains("\_"))
     7.  select(starwars, contains("color"), birth_year))
     8.  select(starwars, ends_with("color"), ends_with("year"))
 
@@ -341,4 +340,13 @@ summarize(starwars,
           mean_mass = mean(mass, na.rm = T),
           count = n(),
           .by = c(species,sex))
+```
+
+## Renaming
+
+rename(data, new_name = old_name)
+
+```{r}
+rename(starwars, 
+       )
 ```
