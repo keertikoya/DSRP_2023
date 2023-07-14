@@ -20,7 +20,7 @@ on_thyr <- data |> filter(on_thyroxine == "t")
 not_on_thyr <- data |> filter(on_thyroxine == "f")
 
 t.test(on_thyr$age, not_on_thyr$age, paired = F, alternative = "two.sided")
-# p value is 0.0859 (not significant, failed to reject null hypothesis)
+# p value: 0.0859 (not significant, failed to reject null hypothesis)
 
 # There is not a significant difference in the mean age between 
 # groups of patients on thyroxine and patients not on thyroxine.
@@ -51,8 +51,8 @@ TukeyHSD(anova_results)
 
 # two categorical variables: on_thyroxine and thyroid_surgery
 
-# null: There is a significant association between on_thyroxine and thyroid_surgery.
-# alternate: There is not a significant association between on_thyroxine and thyroid_surgery
+# null: There is a significant association between patients on thyroxine and patients who have undergone thyroid surgery.
+# alternate: There is not a significant association between patients on thyroxine and patients who have undergone thyroid surgery.
 
 t <- table(data$on_thyroxine, data$thyroid_surgery)
 chisq_result <- chisq.test(t)
