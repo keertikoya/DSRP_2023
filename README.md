@@ -40,3 +40,5 @@ The purpose of this project is to extract useful information from data on thyroi
 
 17. **patient_id** - unique id of the patient **(str)**
 
+#### Results
+My final task involved the creation of three regression models (linear, boosted decision tree, and random forest) to predict FTI levels in the blood of a thyroid patient using TSH, T3, TT4, and T4U values as features. My MAE and RMSE values were 5.48 and 11.7 for the linear regression model, 2.81 and 6.94 for the boosted decision tree model, and 2.20 and 5.83 for the random forest model.
